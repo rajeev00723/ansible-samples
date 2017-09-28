@@ -1,0 +1,11 @@
+# Ansible defaults to forks=5. Serial keywork can change that behaviour
+# So if you set serial=1, then executing this playbook will take longer
+# Use time when running the playbook to get timing stats
+
+- name: First play. Showing serial behaviour
+  hosts: servera,serverb
+  gather_facts: false
+#  serial: 1
+  remote_user: devops
+  tasks:
+    - command: sleep 3s

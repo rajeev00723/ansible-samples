@@ -1,0 +1,17 @@
+---
+# Take note the it is with_random_choice  and not with_random_choices  (student guide has typo)
+- name: My first play choosing a random item
+  hosts: localhost
+  tasks:
+    - name: Show loop
+      shell: echo '{{ item }}'
+      with_random_choice:
+        - win
+        - lose
+        - draw
+      register: output
+    - debug:
+        var: output.results[0].stdout
+
+
+...

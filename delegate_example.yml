@@ -1,0 +1,37 @@
+---
+- name: First Play. Delegate example
+  hosts: servera
+  tasks:
+    - command: hostname                # No delegation. Runs on servera          
+      register: output1
+    - debug:
+        var: output1.stdout
+        
+    - command: hostname                # Delegated to localhost.
+      register: output2
+      delegate_to: localhost
+    - debug:
+        var: output2.stdout
+
+    - local_action: command hostname    #same as second task above.
+      register: output3
+    - debug:
+        var: output3.stdout
+
+    - command: hostname                # Delegated to serverb which is listed in inventory
+      register: output4
+      delegate_to: serverb
+    - debug:
+        var: output4.stdout
+
+# Uncomment add_host task if you want to control the settings used to connect to tower
+# since it is not defined in the inventory. Otherwise it will use the connection type
+# of the managed host
+    - add_host: name=tower ansible_host=172.25.250.12  ansible_user=student ansible_connection=ssh
+
+    - command: hostname                # Delegated to tower which is not in inventory
+      register: output5
+      delegate_to: tower
+    - debug:
+        var: output5.stdout
+...

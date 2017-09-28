@@ -1,0 +1,22 @@
+---
+- name: First Play. Shows some jinja2 filters in use
+  hosts: localhost
+  tasks:
+    - command: /bin/false
+      register: result
+      ignore_errors: True
+
+    - name: This task will run if the first task failed
+      shell: echo "failed"
+      when: result|failed
+
+    # In older versions of ansible use |success, now both are valid but succeeded uses the correct tense.
+    - name: This task will be run if the first task was successful
+      shell: echo "success"
+      when: result|succeeded
+
+    - name: This task will run if the first task was skipped
+      shell: echo "skipped"
+      when: result|skipped
+
+...

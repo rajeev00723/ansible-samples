@@ -1,0 +1,18 @@
+---
+- name: First Play. Showing conditions using groups array
+  hosts: all
+  tasks:
+    - name: Display value of inventory_hostname
+      debug:
+        msg: inventory_hostname value is {{ inventory_hostname }}
+
+    - name: Display the value of groups special array
+      debug:
+        msg: "{{ groups }}"
+
+    - name: Display message when the current machine is in group1
+      debug:
+        msg: "{{ inventory_hostname }} is in group1"
+      when: inventory_hostname in groups["group1"]
+
+...

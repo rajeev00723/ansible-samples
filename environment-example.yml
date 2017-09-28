@@ -1,0 +1,8 @@
+---
+- name: Environment example - first play
+  hosts: servera
+  environment:
+     EDITOR: nano
+  tasks:
+    - debug:
+        var: ansible_env["EDITOR"]

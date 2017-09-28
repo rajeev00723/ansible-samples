@@ -1,0 +1,19 @@
+---
+- name: First play. Shows how to deploy jinja templates
+  hosts: localhost
+  become: true
+  vars: 
+    users:
+      - alice
+      - bob
+      - charles
+  tasks:
+    - name: Deploy the motd.j2 file to /etc/motd
+      template: 
+        src: templates/motd.j2
+        dest: /etc/motd
+        owner: root
+        group: root
+        mode: 0644
+
+...

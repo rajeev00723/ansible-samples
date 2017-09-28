@@ -1,0 +1,18 @@
+
+# ansible all -m debug -a 'var=hostvars[inventory_hostname]'
+--> notice the inventory_hostname is not in {{ }}
+
+# ansible all -m setup 
+
+Popular variables:
+=================================================================================================
+ansible_connection  # can be used in inventory files
+ansible_host
+
+groups["webservers"]  # list of hosts in the webservers group
+--> commonly used in when: conditions,     inventory_hostname in groups['webservers']
+
+ansible_env['ENV_VARIABLE']
+--> used with {{ }} if placed as value
+
+inventory_host

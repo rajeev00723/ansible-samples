@@ -1,0 +1,15 @@
+---
+# Unlike with_file, each item is the file path that matches the glob (and not the file contents)
+- name: My first play looping over fileglobs
+  hosts: localhost
+  tasks:
+    - name: Show loop
+      shell: echo '{{ item }}'
+      with_fileglob:
+        - "*.cfg"
+      register: output
+    - debug:
+        var: output.results[0].stdout
+
+
+...

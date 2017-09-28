@@ -1,0 +1,23 @@
+---
+- name: Play1
+  hosts: localhost
+  become: true
+  pre_tasks:
+    - name: Tasks that run before role tasks
+      debug:
+        msg: Hey i run before any roles
+  roles:
+    #- { role: setup-http-role , web_content: Hello World }
+    - role: setup-http-role
+      web_content: Hello World 
+
+  tasks:
+    - name: Normal tasks always run after role tasks
+      debug: 
+        msg: I also run after all role tasks
+
+  post_tasks:
+    - name: tasks that run after role tasks
+      debug:
+        msg: Hey i run after all role tasks
+...

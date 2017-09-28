@@ -1,0 +1,5 @@
+# The file name must have .fact extension and be placed in /etc/ansible/fact.d
+
+[package]			# section required, not optional
+purpose="for databases"		# can also use purpose: "for databases" syntax
+comments="my comment"

@@ -1,0 +1,24 @@
+- name: first play
+  hosts: servera
+  remote_user: devops
+  become: true
+  tasks:
+      # collect facts from serverb
+    - setup:
+      delegate_to: serverb
+      delegate_facts: false
+    - debug:
+        # undefined if delegated_facts=false (which is the default).
+        # gathering of facts will replace current hosts facts
+        # Will show serverb if delegated_facts: true. Facts for serverb
+        # are placed in hostsvars['serverb'] and does not affect 
+        # the current server's (servera) facts
+        var: hostvars['serverb'].ansible_hostname
+    - debug:
+        #Shows serverb if delegated_facts: false. facts gathered at serverb
+        #replaces the facts of servera (the current host)
+        #Shows servera if delegated_facts: true, facts gathered at serverb
+        #is placed in its own section; hostvars['serverb'] and does not
+        #replace servera's facts
+        var: hostvars['{{ inventory_hostname }}'].ansible_hostname
+

@@ -1,0 +1,52 @@
+---
+- name: This is the first play
+  user: USER                            # usually placed in ansible.cfg
+  become: True                          # usually we place this in ansible.cfg
+  hosts: all|group|hostname|pattern
+  vars:                       # playbook variable
+    users: 
+      rachel:
+        firstname: rachel     # users.rachel.firstname
+        lastname: adams       # users.rachel.lastname
+      bob:
+        firstname: bob
+        lastname: emerson
+
+  vars_files:                 # playbook variable
+    - vars/var_file1.yml      # variable file in yml format. 
+    - vars/var_file2.yml
+
+  environment:            # declare environment variables. Value used in tasks or templates 
+    ENV_VAR_1: value      # {{  ansible_env['ENV_VAR1'] }}    
+    ENV_VAR_2: value      # environment can also be used at the task level
+
+  connection: local|ssh|paramiko  # set the connection for the entire play. Also can be set at inventory file
+                                  # via host variable ansible_connection and optionally ansible_host
+                                  # can also be set via command line --connection 
+
+  gather_facts: no        # otherwise ansible always gathers facts
+
+  tasks:
+    - include: file1.yml                # yml file containing individual task array items
+      vars:
+        web_package: httpd
+        firewall_pkg: firewalld
+
+    - include_vars: myvars.yml          # vars file is yml or json format. Overrides playbook and inventory variables
+
+    - block:
+        - name: A task in a block
+          module: 
+            argument1:
+            argument2:
+      when: CONDITION 
+      rescue:                   # tasks under rescue are run if the block fails
+      always:                   # tasks under always always run
+        
+  handlers:
+    - name: handler_name
+      module:
+         argument1:
+         argument2:
+      ... etc ...
+...

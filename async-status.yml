@@ -1,0 +1,32 @@
+---
+- name: First play. checking async job status
+  hosts: localhost
+  tasks:
+    - name: Long job (30s) with async and don't wait (poll set to 0)
+      shell: sleep 30s && echo job done > /tmp/async-status-demo
+      async: 60
+      poll: 0
+      register: job_output
+
+    - debug:
+        var: job_output
+
+    - name: checking one time the status of the background task
+      async_status:
+        jid: "{{ job_output.ansible_job_id }}"
+      register: first_job_result
+
+    - debug:
+        var: first_job_result
+
+    - name: Recursively check the status of the background task
+      async_status:
+        jid: "{{ job_output.ansible_job_id }}"
+      register: job_result
+      until: job_result.finished
+      retries: 10
+      delay: 5
+
+    - debug:
+        var: job_result
+...

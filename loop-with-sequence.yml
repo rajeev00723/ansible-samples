@@ -1,0 +1,32 @@
+---
+- name: My first play looping over a sequence
+  hosts: localhost
+  tasks:
+    - name: Show loop
+      shell: echo '{{ item }}'
+      with_sequence: start=1 end=3
+      register: output
+    - debug:
+        var: output.results[0].stdout
+
+
+- name: My second play looping over a sequence
+  hosts: localhost
+  tasks:
+    - name: Show loop
+      shell: echo '{{ item }}'
+      with_sequence: count=4 
+      register: output
+    - debug:
+        var: output.results[0].stdout
+
+- name: My third play looping over a sequence
+  hosts: localhost
+  tasks:
+    - name: Show loop
+      shell: echo '{{ item }}'
+      with_sequence: start=3 end=7 stride=2
+      register: output
+    - debug:
+        var: output.results[0].stdout
+...

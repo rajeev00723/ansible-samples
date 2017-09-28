@@ -1,0 +1,23 @@
+---
+- name: Restart servera and wait for it to be available again
+  hosts: servera
+  remote_user: devops
+  tasks:
+    - name: Restarting servera
+      shell: sleep 2 && shutdown -r now "Ansible updates triggered"
+      async: 1
+      poll: 0
+      become: true
+      ignore_errors: true
+
+    - name: waiting for servera to come back
+      wait_for:
+        host: "{{ inventory_hostname }}"
+        port: 22
+        state: started
+        delay: 30
+        timeout: 300
+      delegate_to: localhost
+
+...
+

@@ -1,0 +1,21 @@
+---
+- name: First Play. Showing conditions
+  hosts: localhost
+  vars:
+    memory_check: 15000
+  tasks:
+    - name: Dispay ansible fact
+      debug:
+        msg: The ansible fact on memory ansible_memtotal_mb value is {{ ansible_memtotal_mb }} 
+
+    - name: Display this message if the memory is below {{ memory_check }} MB
+      debug:
+        msg: Memory is below {{ memory_check }} MB
+      when:  ansible_memtotal_mb < memory_check
+
+    - name: Display this message if the memory is {{ memory_check }} MB and above
+      debug:
+        msg: Memory is {{ memory_check }} MB and above
+      when:  ansible_memtotal_mb >= memory_check
+
+...

@@ -1,0 +1,16 @@
+---
+# Each item is the CONTENTS of the file
+- name: My first play looping over files
+  hosts: localhost
+  tasks:
+    - name: Show loop
+      shell: echo '{{ item }}'
+      with_file:
+        - /etc/hosts
+        - /etc/issue
+      register: output
+    - debug:
+        var: output.results[0].stdout
+
+
+...

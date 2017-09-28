@@ -1,0 +1,15 @@
+---
+- name: My first play simple with_items loop
+  hosts: localhost
+  tasks:
+    - name: Show loop
+      shell: echo '{{ item }}'
+      with_items:
+        - apple
+        - orange
+      register: output
+    - debug:
+        var: output.results[0].stdout
+
+
+...

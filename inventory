@@ -1,0 +1,8 @@
+[group1]
+workstation   ansible_connection=local ansible_host=localhost
+servera     ansible_connection=ssh ansible_host=localhost
+[group2]
+127.0.0.1
+workstation   ansible_connection=local ansible_host=localhost
+servera     ansible_connection=ssh ansible_host=localhost
+serverb

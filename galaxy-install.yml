@@ -1,0 +1,5 @@
+---
+# usage:     ansible-galaxy -p ROLES_DIR  install -r THIS_FILE.yml 
+- src: http://server/file.tgz
+  name: myrole.name
+...

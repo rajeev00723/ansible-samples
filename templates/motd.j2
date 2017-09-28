@@ -1,0 +1,29 @@
+{# This is a jinja2 comment. Will not appear in the target file #}
+{#                                                              #}
+{# The ansible_managed variable is included as good practice to #}
+{# let others know this file is managed by ansible              #}
+{#                                                              #}
+{{ ansible_managed }}
+Welcome to {{ ansible_hostname }}
+
+List of users allowed in this system (using for loop):
+{% for u in users %}
+  {{ loop.index }} - {{ u }}
+{% endfor %}
+
+users array without filtering:
+{{ users }}
+
+List of users displayed using the to_yaml filter
+{{ users | to_yaml }}
+
+List of users displayed using the to_json filter
+{{ users | to_json }}
+
+List of users displayed using the to_nice_yaml filter
+{{ users | to_nice_yaml }}
+
+List of users displayed using the to_nice_json filter
+{{ users | to_nice_json }}
+
+

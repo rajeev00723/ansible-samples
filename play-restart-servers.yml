@@ -1,0 +1,30 @@
+- name: Play to show restart server and wait for it to be started back
+  hosts: webservers
+  serial: 1   # we want rolling restart, one by one
+  tasks:
+    - name: Restart host
+      command: systemctl reboot   # sleep 2 && shutdown -r now "rebooting via ansible"
+      async: 1
+      poll: 0
+      ignore_errors: true
+
+    - name: Wait for server to be back up, poll from control host
+      wait_for:
+        host: "{{ inventory_hostname }}"
+        state: started
+        delay: 25       #delay 25 seconds before checking
+        timeout: 200    #give up after 200 seconds
+      delegate_to: 127.0.0.1
+      become: false     # no need to become on control node
+
+    - debug:
+        msg: Server is up or we gave up
+
+    - name: Check for port to be available
+      wait_for:
+        host: "{{ inventory_hostname }}"
+        port: 80
+        state: started
+        timeout: 20 
+
+

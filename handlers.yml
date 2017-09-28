@@ -1,0 +1,57 @@
+---
+# Handlers are executed after all tasks have completed in a play
+# Handlers are executed in the order declared and not order of being called
+- name: First Play, shows handlers.
+  hosts: localhost
+  tasks:
+    - name: Task1
+      debug:
+        msg: "Task 1 executed"
+      notify: handler2
+    - name: Task2
+      debug:
+        msg: "Task 2 executed"
+      notify: handler1
+    - name: Task3
+      debug:
+        msg: "Task 3 executed"
+
+# The handlers below will not be called as the debug task by default does 
+# not affect the changed attribute
+
+  handlers:
+    - name: handler1
+      debug:
+        msg: "Handler 1 executing"
+    - name: handler2
+      debug:
+        msg: "Handler 2 executing"
+
+
+
+- name: Second  Play, shows handlers, with changed_when attribute set for the debug tasks
+  hosts: localhost
+  tasks:
+    - name: Task4
+      debug:
+        msg: "Task 4 executed"
+      notify: handlerB
+      changed_when: true
+    - name: Task5
+      debug:
+        msg: "Task 5 executed"
+      notify: handlerA
+      changed_when: true
+    - name: Task6
+      debug:
+        msg: "Task 6 executed"
+      changed_when: true
+
+  handlers:
+    - name: handlerA
+      debug:
+        msg: "Handler A executing"
+    - name: handlerB
+      debug:
+        msg: "Handler B executing"
+...

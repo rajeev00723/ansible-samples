@@ -1,0 +1,37 @@
+- name: Task name
+  module:
+    argument1:
+    argument2:
+  when: CONDITION       # inventory_hostname in groups["dbservers"] 
+  notify: 
+    - HANDLER1          # sequence here does not matter. We follow handler declaration sequence
+    - HANDLER2          # handlers are only notified in this task has changed!
+  register: output
+  failed_when: CONDITION    # output.rc == 1
+  changed_when: CONDITION   # "'Success' in output.stdout"   
+  ignore_errors: yes|no
+  async: SECONDS    # wait for task to finish until SECONDS. If zero, we allow forever. 
+  poll: SECONDS     # if zero continue next task, don't wait
+  tags:
+     - tag1
+     - tag2
+  environment:
+    ENV_VAR1: value
+    ENV_VAR2: value
+  with_items:         #use {{ item }} to refer to the item in module parameters
+    - item1           #if ITEM is a dictionary { name: 'john' , groups: 'wheel' }, use {{ item.name }}, {{ item.groups }}
+    - item2       
+  with_items: {{ array_variable }}
+
+  with_nested:                    # for nested looping
+    - [ 'abc' , 'xyz' ]           # refer to this item as {{ item[0] }}
+    - [ 'def' , 'mmm' , 'ppp' ]   # refer to this item as {{ item[1] }}
+
+  with_file: file1 file1          # {{ item }} is the content of each file in sequence
+
+  with_fileglob: folder1/*.mp3    # each item is one file glob match
+
+  with sequence:  start=1 end=4   # sequence of numbers
+
+  delegate_to: server.lab.example.com  # can use {{ item }} and with_items: "{{ groups['proxyservers'] }}"
+                                       # which means we run the task to set of servers in group proxyservers
