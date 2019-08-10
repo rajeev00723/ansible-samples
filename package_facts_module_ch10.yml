@@ -1,0 +1,15 @@
+# For use in chapter 10 
+- name: show package facts
+  hosts: servera
+  tasks:
+    - name: get the rpm package facts
+      package_facts:
+          manager: "auto"
+    - name: show the ansible_facts.packages variable
+      debug: 
+        var: ansible_facts.packages
+        verbosity: 1
+
+    - name: show python version
+      debug:
+        msg: The python package details is {{ ansible_facts.packages.python}}

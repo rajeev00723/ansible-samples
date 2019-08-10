@@ -1,0 +1,28 @@
+- name: Showing assert
+  hosts: servera
+  remote_user: devops
+  become: true
+  vars:
+    min_heap_mb: 256
+    max_heap_mb: 1024
+    dest_folder: /opt/jboss
+  tasks:
+    - assert:
+        that: min_heap_mb <= max_heap_mb
+        msg: min_heap_mb must be less than or equal to max_heap_mb
+    - name: check that the folder {{ dest_folder }} exists
+      stat:
+        path: "{{ dest_folder}}"
+      register: check
+    - debug:
+        var: check
+    - assert:
+        that: check.stat.exists and check.stat.isdir
+        msg: "{{ dest_folder }} does not exist or is not a directory"
+    - template:
+        src: standalone.conf.j2
+        dest: "{{ dest_folder}}/standalone.conf"
+        mode: 0644
+        owner: root
+        group: root
+    

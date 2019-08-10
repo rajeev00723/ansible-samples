@@ -1,0 +1,15 @@
+---
+- name: My first play simple with_items loop
+  hosts: localhost
+  tasks:
+    - name: Show loop
+      shell: echo 'username is {{ item.user }} and uid is {{ item.uid }}'
+      with_items:
+        - { user: "john" , uid: 2000 }
+        - { user: "alice" , uid: 2001 }
+      register: output
+    - debug:
+        var: output.results[0].stdout
+
+
+...

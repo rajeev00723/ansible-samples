@@ -1,0 +1,36 @@
+- name: Play to show tags
+  hosts: servera
+  remote_user: devops
+  become: false
+  tasks:
+        - name: Install httpd
+          yum:
+            name: httpd
+            state: latest
+          tags: 
+            - web
+          ignore_errors: true
+        - name: Open http port
+          firewalld:
+            service: http
+            permanent: true
+            state: enabled
+            immediate: true
+          tags: 
+            - web
+        - name: Deploy apache config file
+          copy:
+            src: httpd-info.conf
+            dest: /etc/httpd/conf.d/httpd-info.conf
+          notify: restart_httpd
+          tags: 
+            - web
+
+        - include: mysql.yml
+          tags: 
+            - db
+  handlers:        
+        - name: restart_httpd
+          service:
+            name: httpd
+            state: restarted

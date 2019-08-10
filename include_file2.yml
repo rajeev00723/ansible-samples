@@ -1,0 +1,15 @@
+# file to be included/imported
+- name: Task3
+  debug:
+    msg: Task3 - The value of item is {{ item }}
+- name: Ensure user exists and added to daemon group
+  user:
+    name: "{{ item }}"
+    append: true
+    groups: daemon
+  register: output
+- name: Email user if changes were made or user created
+  mail:
+    to: "{{ item }}"
+    subject: You have been added to the daemon group
+  when: output.changed

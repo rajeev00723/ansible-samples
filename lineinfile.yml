@@ -1,0 +1,17 @@
+- name: Shows lineinfile
+  hosts: servera
+  user: devops
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Install httpd
+      package:
+        name: httpd   
+        state: latest
+    - name: Reconfigure httpd to listen on 8081
+      lineinfile:
+        regexp: ^Listen
+        line: Listen 8081
+        path: /etc/httpd/conf/httpd.conf
+        state: present
+  

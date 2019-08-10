@@ -1,0 +1,73 @@
+---
+- name: Play to demonstrate include vs import
+  hosts: servera
+  user: devops
+  become: true
+  gather_facts: no
+  tasks:
+    - include_tasks: include_file.yml          # CANNOT use --list-tags and --tags=app or --tags=db
+                                                # Also cannot use --start-at-task or --list-tasks
+
+#    - include_tasks: include_file.yml          # CAN use --list-tags and --tags-app or --tags=db
+#      tags:                                    # but our include_task tag needs to tag all possible tag values 
+#        - app                                  # used in the include file which is troublesome
+#        - db                                   
+
+#    - import_tasks: include_file.yml            # --list-tags and --tags=app and --tag=db works as expected
+                                                 # can use --list-tasks and --start-at-task
+
+# SO THE ADVANTAGE OF IMPORT is tags, and list-tasks and start-at-task
+# NOW for the disadvantage, import_tasks cannot be used with loops
+#
+#    - include_tasks: include_file2.yml          # CAN be used with loops!
+#      loop:
+#        - alice
+#        - bob
+
+#    - import_tasks: include_file2.yml          # Will get syntax error if trying to use loops with import_tasks
+#      loop:
+#        - alice
+#        - bob
+#
+#
+
+#    - include_tasks: "{{ myinclude_file }}"    # ensure you have declare inventory variable for servera to test this
+                                                # eg servera   myinclude_file=include_file.yml
+                                                # This should work
+
+#    - import_tasks: "{{ myinclude_file }}"     # This will fail with syntax error. Inventory variables are 
+                                                # not allowed to be used with import_tasks. 
+                                                # Use play variables vars: and vars_files: instead
+# What about handlers ?
+
+
+#    - name: Task to trigger handler1            # This will fail. We cannot refer to a handler name in the
+#      debug:                                    # included tasks
+#         msg: Task to trigger handler1
+#      changed_when: true
+#      notify: handler1
+  
+#    - name: Task to trigger somehandler         # This works as somehandler name points to an include_tasks
+#      debug:                                    
+#         msg: Task to trigger somehandler
+#      changed_when: true
+#      notify: somehandler
+
+# Lastly we show we can pass parameters to include/import tasks
+#    - include_tasks: include_deploy_service.yml
+#      vars:
+#         pkg: httpd
+#         firewalld_service: http
+#         service: httpd
+
+# Lastly we show we can pass parameters to include/import tasks
+#    - import_tasks: include_deploy_service.yml
+#      vars:
+#         pkg: vsftpd
+#         firewalld_service: ftp
+#         service: vsftpd
+
+  handlers:
+    - include_tasks: include_handlers.yml
+    - name: somehandler
+      include_tasks: include_handlers2.yml

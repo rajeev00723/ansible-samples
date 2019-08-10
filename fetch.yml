@@ -1,0 +1,7 @@
+- name: Demo fetch module
+  hosts: all
+  tasks:
+    - name: Fetch the /etc/hostname file from all managed hosts
+      fetch:
+        src: /etc/hostname
+        dest: backups

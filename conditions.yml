@@ -1,0 +1,29 @@
+---
+- name: This is the first play
+  hosts: databases
+  vars: 
+    x: 10
+    myname: john adams
+  tasks:
+    - name: Print output based on conditions
+      debug:
+        msg: The value of x is {{ x }}
+    - name: Conditional output if x is more than 10 
+      debug:
+        msg: x is more than 10
+      when: x > 10
+    - name: Conditional output if x less than or equal to  10 
+      debug:
+        msg: x is less than or equal to 10
+      when: x <= 10
+    - name: Task to check if name is john adams
+      debug:
+        msg: Your name is john adams
+      when: myname == "john adams"
+    - name: Task to check if name is kate
+      debug:
+        msg: Your name is kate
+      when: myname == "kate"
+
+...
+

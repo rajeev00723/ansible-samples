@@ -1,0 +1,28 @@
+# I use this to demo the behavior of forks and diffentiate it from serial.
+#   - this supercedes my old demo file: serial-example.yml
+# This playbook expects ansible_local.myfacts.package.mytimeout fact to 
+# have been set on servera,b and c with 3, 10 and 15 respectively.
+# Contents of : /etc/ansible/facts.d/myfacts.fact
+#                [package]
+#                timeout=3    #10 for serverb and 15 for serverc
+- name: First play
+  hosts: servera,serverb,serverc
+  #serial: 1      #when there is no serial keyword, parrallelism is per task
+                  #controlled by forks= in ansible.cfg or set by --forks in 
+                  #ansible-playbook command.
+                  #With serial set to 1, each host must complete the play before 
+                  #going to the next host. (one by one).
+                  #You could also set serial: 2, that means 2 hosts must complete the
+                  #play before proceding to the next host. The two hosts can be processed
+                  #in parrallel per task as per forks= config value.
+  tasks:
+    - debug:
+        var: ansible_local.myfacts.package.mytimeout
+
+    - name: Running a shell command to sleep
+      shell: sleep {{ ansible_local.myfacts.package.mytimeout }} 
+
+
+    - name: Task after sleeping
+      debug:
+        msg: "Last task done after sleeping task"

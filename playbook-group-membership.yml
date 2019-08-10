@@ -1,0 +1,13 @@
+- name: first play
+  hosts: all
+  vars:
+    group_check: lamp
+  tasks:
+    - name: Only run this task if the current server belongs to the {{ group_check }}  group
+      debug:
+        msg: "This message should only appear for servers in {{ group_check }}  group"
+      when: "group_check in group_names"
+    - name: Only run this task if the current server belongs to the {{ group_check }}  group
+      debug:
+        msg: "This message should only appear for servers in {{ group_check }}  group"
+      when: "inventory_hostname in groups[group_check]"

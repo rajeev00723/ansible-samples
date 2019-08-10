@@ -1,0 +1,37 @@
+# always_run is deprecated. So we show check_mode instead
+- name: testing check_mode
+  hosts: servera
+  remote_user: devops
+  become: true
+  tasks:
+    - name: Check whether httpd installed
+      shell: rpm -q httpd
+      register: output
+      ignore_errors: true
+      #check_mode: no # Intention: 
+                      # - Without check_mode, the task is always skipped
+                      #   when -C is passed in
+                      #     -> Which affects the installation of httpd
+                      #        which depends on this task's register variable
+                      # - So we set check_mode: no for this task to always run
+                      #   (don't run in 'check' mode instead run in normal mode) 
+                      #   even though -C is passed in
+
+    - name: Show output register variable
+      debug:
+        var: output
+        verbosity: 1
+
+    - name: Install httpd
+      yum:
+        name: httpd
+        state: latest
+      check_mode: yes   # Intention:
+                        # - While testing the rpm -q test above we set check_mode
+                        #   to yes to skip installing httpd (actual)
+                        # - This means, whether run with or without -C
+                        #   we will not ACTUALLY install httpd, although
+                        #   the module reports changed
+                        # - Once we are ready, we remove the check_mode statement
+                        #   and when run without -C, httpd is potentially installed
+      when: output.rc != 0

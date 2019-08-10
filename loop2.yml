@@ -1,0 +1,19 @@
+- name: Play to demonstrate loop with array of dictionaries
+  hosts: servera
+  remote_user: devops
+  vars:
+    users: 
+        - username: user1
+          groups: wheel,mail
+        - username: user2
+          groups: wheel
+        - username: user3
+  tasks:
+    - name: Create users and add them to supplementary groups
+      user:
+        name: "{{ item.username }}"
+        groups: "{{ item.groups | default(omit) }}"   #default(omit) is a filter to omit the parameter if the
+                                                      #value variable is not defined, which is true for user3
+        state: present
+      loop: "{{ users }}"
+      become: true

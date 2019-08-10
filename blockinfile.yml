@@ -1,0 +1,14 @@
+- name: Shows blockinfile
+  hosts: servera
+  user: devops
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Update the /etc/hosts file
+      blockinfile:
+        block: |
+                192.168.0.10 abc abc.example.com
+                192.1680.11 xyz xyz.example.com
+        path: /etc/hosts
+        state: present
+  

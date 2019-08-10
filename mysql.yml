@@ -1,0 +1,14 @@
+- name: Install mysql server
+  yum: 
+    name: mariadb-server
+    state: latest
+- name: Start the service
+  service: 
+    name: mariadb
+    state: started
+- name: Open mysql port
+  firewalld:
+      service: mysql
+      permanent: true
+      state: enabled
+      immediate: true

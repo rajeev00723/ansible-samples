@@ -1,0 +1,20 @@
+- name: Distrubute jboss config file
+  hosts: servera
+  become: true
+  gather_facts: no
+  remote_user: devops
+  vars_files:
+    - vars/public.yml
+    - vars/private.yml
+  tasks:
+    - name: Ensure the directory is available
+      file:
+       path: /opt/jboss/configuration/
+       state: directory
+       mode: 0755
+       owner: root
+       group: root
+    - name: Deploy standalone.xml template
+      template:
+       src: templates/standalone.xml.j2
+       dest: /opt/jboss/configuration/standalone.xml

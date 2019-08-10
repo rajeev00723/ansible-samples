@@ -1,0 +1,18 @@
+- name: Showing assert
+  hosts: servera
+  remote_user: devops
+  become: true
+  vars:
+    min_heap_mb: 512
+    max_heap_mb: 1024
+  tasks:
+    - fail:
+        msg: min_heap_mb must be less than or equal to max_heap_mb
+      when: min_heap_mb > max_heap_mb
+    - template:
+        src: standalone.conf.j2
+        dest: /tmp/standalone.conf
+        mode: 0644
+        owner: root
+        group: root
+    

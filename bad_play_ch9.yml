@@ -1,0 +1,25 @@
+#to show a badly written play
+- hosts: servera
+  become: true
+  remote_user: devops
+  vars:
+    allow: "enabled"
+  tasks:
+    - yum:
+            name: httpd
+            state: latest
+         notify: ahandler
+    - service:
+       name: httpd
+       state: restarted
+       enabled: true
+    -    firewalld:
+               service: http
+               state: "{{ allow }}"
+               immediate: true
+               permanent: true
+  handlers:
+                  - name: ahandler
+                    service: 
+                            name: httpd
+                            state: restarted

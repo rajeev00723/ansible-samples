@@ -1,0 +1,22 @@
+---
+- name: My first play simple with_nested loop
+  hosts: localhost
+  tasks:
+    - name: Show loop
+      shell: echo 'item[0] is {{ item[0] }} and item[1] is {{ item[1] }}'
+      with_nested:
+        - [ "sales" , "finance" ]
+        - [ "monthly" , "weekly" , "daily" ]
+      register: output
+    - debug:
+        var: output.results[0].stdout
+
+    - name: Create folders
+      file: 
+        state: directory
+        mode: 0755
+        path: "/tmp/{{ item[0] }}/{{ item[1] }}"
+      with_nested:
+        - [ sales , finance ]
+        - [ "monthly" , "weekly" , "daily" ]
+...

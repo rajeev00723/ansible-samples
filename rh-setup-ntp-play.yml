@@ -1,0 +1,10 @@
+- name: Play using RH system role to setup ntp
+  hosts: servera
+  remote_user: devops
+  become: true
+  roles:
+    - role: rhel-system-roles.timesync
+      timesync_ntp_provider: chrony
+      timesync_ntp_servers:
+        - hostname: classroom.example.com  
+          iburst: yes                 

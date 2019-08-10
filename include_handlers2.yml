@@ -1,0 +1,6 @@
+- name: handler2
+  debug:
+     msg: Running handler2
+- name: handler3
+  debug:
+     msg: Running handler3

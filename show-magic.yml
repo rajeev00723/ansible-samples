@@ -1,0 +1,28 @@
+---
+# For use in chapter 4 (ansible course v2.3)
+# Use vim extended command:12,27s/^/#/  to comment out 
+# lines since yaml there is no block comment
+- name: Show some magic variables
+  hosts: all
+  gather_facts: yes
+  tasks:
+    - name: Show hostvars object
+      debug:
+        var: hostvars
+#    - name: Show inventory_hostname magic variable
+#      debug:
+#        var: inventory_hostname
+#    - name: Show group_names magic variable (list of groups current host is a member of)
+#      debug:
+#        var: group_names
+#    - name: groups magic variable shows all groups in inventory
+#      debug:
+#        var: groups
+#    - name: Show ansible_memtotal_mb for current node
+#      debug:
+#        var: ansible_memtotal_mb
+#    - name: Show ansible_memtotal_mb for serverb while running on servera
+#      debug:
+#        var: hostvars.serverb.ansible_memtotal_mb
+#      when: inventory_hostname == "servera"
+...

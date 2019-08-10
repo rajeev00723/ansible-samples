@@ -1,0 +1,24 @@
+- name: Disable selinux
+  hosts: servera
+  remote_user: devops
+  become: true
+  tasks:
+    - block:
+        - include_role: 
+            name: rhel-system-roles.selinux
+          vars:
+            selinux_state: permissive
+      rescue:
+        - name: Fail here if reason for failure is not reboot required
+          fail:
+            msg: Failure not due to rebooting required. Aborting
+          when: not selinux_reboot_required
+
+        - name: Restart managed host
+          reboot: 
+
+        - name: Reapply the role after reboot
+          include_role: 
+            name: rhel-system-roles.selinux
+          vars:
+            selinux_state: permissive

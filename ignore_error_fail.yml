@@ -1,0 +1,23 @@
+- name: Play to show ignore errors and failed when and fail module
+  hosts: localhost
+  gather_facts: no
+  user: devops
+  tasks:
+    - name: Download something that does not exist
+      get_url:
+        url: http:serverxx.example.com
+        dest: /tmp
+#      ignore_errors: true
+    - debug:
+        msg: Task after the get_url module download attempt
+    - name: Check whether alice  exists
+      command: id alice
+      register: output
+#      failed_when: false
+#      changed_when: false
+    - debug:
+        msg: User alice DOES NOT exist
+      when: output.rc != 0      #display message if alice return code not zero (alice not found)
+    - debug:
+        msg: User alice exist
+      when: output.rc == 0      #display message if alice return code not zero (alice not found)

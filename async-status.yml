@@ -3,7 +3,7 @@
   hosts: localhost
   tasks:
     - name: Long job (30s) with async and don't wait (poll set to 0)
-      shell: sleep 30s && echo job done > /tmp/async-status-demo
+      shell: sleep 30s && echo job done >> /tmp/async-status-demo
       async: 60
       poll: 0
       register: job_output

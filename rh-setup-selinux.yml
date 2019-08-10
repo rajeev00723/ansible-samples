@@ -1,0 +1,8 @@
+- name: Change a boolean
+  hosts: servera
+  remote_user: devops
+  become: true
+  roles:
+    - role: rhel-system-roles.selinux
+      selinux_booleans:
+       - { name: 'samba_enable_home_dirs', state: 'on', persistent: 'yes' }

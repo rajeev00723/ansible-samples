@@ -1,0 +1,18 @@
+- name: Play to demonstrate loop
+  hosts: localhost
+  remote_user: devops
+  tasks:
+    - debug:
+        msg: "The value of item loop variable is: {{ item }}"
+      loop:
+        - apple
+        - orange
+        - pear
+    - name: Restart services using loop
+      service:
+        name: "{{ item }}"
+        state: restarted
+      loop:
+        - cups.service
+        - systemd-journald.service
+      become: true

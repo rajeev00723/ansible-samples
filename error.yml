@@ -1,0 +1,36 @@
+- name: Play to show error handling
+  hosts: servera
+  remote_user: devops
+  #become: true     #commented to trigger error in block
+  tasks:
+    - block:
+        - name: Install httpd
+          yum:
+            name: httpd
+            state: latest
+        - name: Open http port
+          firewalld:
+            service: http
+            permanent: true
+            state: enabled
+            immediate: true
+        - name: Deploy apache config file
+          copy:
+            src: httpd-info.conf
+            dest: /etc/httpd/conf.d/httpd-info.conf
+        - name: Restart httpd. Not the best way, should use handler
+          service:
+            name: httpd
+            state: restarted
+      rescue:
+        - debug:
+            msg: An error occurred 
+
+        - name: Generate error log event on managed host
+          shell: logger -p local4.err "Error occured in error.yml playbook"
+          #changed_when: false
+      always:
+        - name: Generate info log event in managed host
+          shell: logger -p info "Reached end of error.yml playbook"
+          #changed_when: false
+

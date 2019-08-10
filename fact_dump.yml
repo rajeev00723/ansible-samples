@@ -1,0 +1,7 @@
+- name: Dump ansible_facts variable
+  hosts: localhost
+  remote_user: devops
+  become: false
+  tasks:
+    - debug:
+        var: ansible_facts

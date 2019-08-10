@@ -1,0 +1,20 @@
+- name: Play to demonstrate loop and register variables
+  hosts: localhost
+  remote_user: devops
+  gather_facts: no
+  tasks:
+    - name: Grep the user student from a list of files
+      command: grep student {{ item }}
+      loop:
+        - /etc/passwd
+        - /etc/group
+      register: output
+
+    - name: Display the ENTIRE output register variable
+      debug:
+        var: output
+
+    - name: Loop through the output register variable for stdout key
+      debug:
+        msg: "The standard output is: {{ item.stdout }}"
+      loop: "{{ output.results }}"    # output.results is the list of results
