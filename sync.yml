@@ -1,0 +1,9 @@
+- name: Play to show synchronize module
+  hosts: servera
+  become: true
+  user: devops
+  tasks:
+    - name: Sync the files/app1-config folder to {{ inventory_hostname }}
+      synchronize:
+        src: files/app1-config    #trailing "/" matters as usual
+        dest: /opt/
