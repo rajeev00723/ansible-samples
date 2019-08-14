@@ -1,4 +1,10 @@
 ---
+# Starting from Ansible 2.5, using filters in when clause will generate a warning
+# instead of 
+#      when: result | failed, 
+# it should be written as:
+#      when: result is failed
+
 - name: First Play. Shows some jinja2 filters in use
   hosts: localhost
   tasks:
@@ -8,15 +14,19 @@
 
     - name: This task will run if the first task failed
       shell: echo "failed"
-      when: result|failed
+      when: result is failed  # The correct way for  >= 2.5
+#      when: result|failed     # warning >= 2.5
 
-    # In older versions of ansible use |success, now both are valid but succeeded uses the correct tense.
+    # In older versions of ansible use |success, now both are valid 
+    # but succeeded uses the correct tense.
     - name: This task will be run if the first task was successful
       shell: echo "success"
-      when: result|succeeded
+      when: result is succeeded  
+#      when: result|succeeded    # warning >= 2.5
 
     - name: This task will run if the first task was skipped
       shell: echo "skipped"
-      when: result|skipped
+      when: result is skipped 
+#      when: result|skipped       # warning >= 2.5
 
 ...
