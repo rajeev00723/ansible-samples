@@ -17,7 +17,9 @@
 #      changed_when: false
     - debug:
         msg: User alice DOES NOT exist
-      when: output.rc != 0      #display message if alice return code not zero (alice not found)
+      when: output.rc != 0      #display message if alice return code 
+                                #not zero (alice not found)
     - debug:
         msg: User alice exist
-      when: output.rc == 0      #display message if alice return code not zero (alice not found)
+      when: output.rc == 0      #display message if alice return code 
+                                #zero (alice found)
