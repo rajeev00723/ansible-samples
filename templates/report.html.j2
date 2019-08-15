@@ -1,0 +1,6 @@
+{# Loop through all hosts in inventory (sorted) and print a html table of the host and the httpd_up status #}
+<table border="1" cellspacing="0" cellpadding="5">
+{% for h in groups['all']|sort %}
+<tr><td>{{ h }}</td><td>{{ hostvars[h].httpd_up | default('unknown')}}</td></tr>
+{% endfor %}
+<table>

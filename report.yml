@@ -1,0 +1,36 @@
+---
+- name: Check whether httpd is running and store status in hostvars via set_fact
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Is httpd active
+      command: systemctl is-active httpd
+      register: output
+      ignore_errors: true
+
+    - name: 
+      debug:
+          var: output
+          verbosity: 1
+
+    - name: Update fact to store status
+      set_fact:
+         httpd_up: false
+      when: output.rc != 0
+
+    - name: Update fact to store status
+      set_fact:
+         httpd_up: true
+      when: output.rc == 0
+
+- name: Report generation on control node using jinja2 template
+  hosts: localhost
+  tasks:
+    - name: Display facts
+      debug:
+        var: hostvars
+        verbosity: 1      
+    - name:
+      template: 
+        src: templates/report.html.j2
+        dest: report.html
